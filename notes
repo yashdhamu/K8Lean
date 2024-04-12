@@ -1,0 +1,82 @@
+Kubernetes
+
+Kubernetes is an open-source container orchestration platform that automates the deployment, scaling, and management of containerized applications. It was originally developed by Google and is now maintained by the Cloud Native Computing Foundation. Kubernetes is designed to be extensible and flexible, allowing you to run your applications in a variety of environments, from on-premises data centers to public cloud providers.
+
+Components:
+
+1. Pods: A pod is the smallest deployable unit in Kubernetes. It represents a single instance of a running application and can contain one or more containers that share resources like networking and storage.
+         Usually one application per pod. Each pod has its own IP address.
+
+2. Services: A service is an abstraction that defines a logical set of pods and a policy by which to access them. It provides a stable endpoint for accessing the pods that make up your application.
+         A service can be exposed in different ways, such as ClusterIP, NodePort, and LoadBalancer.
+
+3. Ingress: An Ingress is an API object that manages external access to services in a cluster. It provides HTTP and HTTPS routing to services based on hostnames and paths.
+         Ingress controllers are responsible for implementing the rules specified in the Ingress resource.
+
+4. ConfigMaps: ConfigMaps allow you to decouple configuration data from your containerized applications. They provide a way to store key-value pairs or configuration files that can be consumed by your pods.
+
+5. Secrets: Secrets are similar to ConfigMaps but are used to store sensitive information like passwords, API keys, and other confidential data. They are stored in a base64-encoded format and can be mounted as volumes or exposed as environment variables in your pods.
+
+6. Volume: Volumes are used to persist data in Kubernetes. They can be used to store configuration files, databases, logs, and other data that needs to be shared between containers or preserved across pod restarts.
+
+7. Deployments: A Deployment is an API object that manages a replicated application. It provides declarative updates to pods and replica sets, ensuring that the desired state is maintained at all times.
+
+8. StatefulSets: StatefulSets are similar to Deployments but are designed for stateful applications that require stable, unique network identifiers and persistent storage. They provide guarantees about the ordering and uniqueness of pod names, as well as the ability to scale up or down without losing data.
+
+Kubernetes Architecture: Kubernetes follows a master-slave architecture, with the master node responsible for managing the cluster and the worker nodes responsible for running the applications.
+
+MiniKube: MiniKube is a tool that allows you to run a single-node Kubernetes cluster on your local machine. It is useful for testing and development purposes and provides a lightweight way to experiment with Kubernetes without the need for a full-scale cluster.
+
+Kubectl: Kubectl is the command-line interface for interacting with Kubernetes clusters. It allows you to create, manage, and monitor resources in your cluster, as well as run commands on individual pods and nodes.
+
+Commands:
+
+- minikube start: Start a local Kubernetes cluster using MiniKube.
+    minikube start --vm-driver=hyperkit: Start MiniKube with a specific VM driver (e.g., hyperkit).
+
+- kubectl get nodes: Get a list of nodes in the cluster.
+- kubectl get pods: Get a list of pods in the cluster. used with -o wide to get more information.
+- kubectl get services: Get a list of services in the cluster.
+- kubectl get replicasets: Get a list of replica sets in the cluster.
+- kubectl get all: Get a list of all resources in the cluster.
+- kubectl get secrets: Get a list of secrets in the cluster.
+- kubeclt get configmaps: Get a list of configmaps in the cluster.
+- kubectl get namespaces: Get a list of namespaces in the cluster.
+- kubectl get deployments: Get a list of deployments in the cluster.
+
+- kubectl create deployment: Create a new deployment in the cluster.
+    kubectl creat -h : Get help for the create command.
+    kubectl create deployment nginx-depl --image=nginx: Create a deployment named nginx using the nginx image.
+- kubectl create namespace: Create a new namespace in the cluster.
+    kubectl create namespace my-namespace: Create a namespace named my-namespace.
+
+- kubectl edit deployment nginx-depl: Edit an existing deployment in the cluster.
+    kubectl edit deployment nginx-depl: Edit the nginx-depl deployment.
+
+- kubectl delete deployment nginx-depl: Delete an existing deployment in the cluster.
+
+- kubectl logs pod-name: Get the logs for a specific pod.
+    kubectl logs nginx-depl-7d4f9c7b6f-7zv8z: Get the logs for the nginx-depl pod with the specified name.
+
+- kubectl describe pod pod-name: Get detailed information about a specific pod.
+    kubectl describe pod nginx-depl-7d4f9c7b6f-7zv8z: Get detailed information about the nginx-depl pod with the specified name.
+- kubectl describe deployment deployment-name: Get detailed information about a specific deployment.
+    kubectl describe deployment nginx-depl: Get detailed information about the nginx-depl deployment.
+- kubectl describe service service-name: Get detailed information about a specific service.
+    kubectl describe service nginx-svc: Get detailed information about the nginx-svc service.
+
+- kubectl exec -it pod-name -- /bin/bash: Execute a command in a specific pod.
+    kubectl exec -it nginx-depl-7d4f9c7b6f-7zv8z -- /bin/bash: Open a shell in the nginx-depl pod with the specified name.
+
+- kubectl apply -f file.yaml: Apply a configuration file to the cluster.
+    kubectl apply -f deployment.yaml: Apply the deployment configuration in the deployment.yaml file.
+
+- kubectl delete -f file.yaml: Delete a configuration file from the cluster.
+    kubectl delete -f deployment.yaml: Delete the deployment configuration in the deployment.yaml file.
+
+- kubectl get deployments -o yaml: Get the deployment configuration in YAML format.
+- kubectl get pods -o json: Get the pod information in JSON format.
+
+- minikube service service-name: Open a service in the default browser.
+    minikube service nginx-svc: Open the nginx-svc service in the default browser.
+
