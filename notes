@@ -43,6 +43,7 @@ Commands:
 - kubeclt get configmaps: Get a list of configmaps in the cluster.
 - kubectl get namespaces: Get a list of namespaces in the cluster.
 - kubectl get deployments: Get a list of deployments in the cluster.
+- kubectl get ns: Get a list of namespaces in the cluster.
 
 - kubectl create deployment: Create a new deployment in the cluster.
     kubectl creat -h : Get help for the create command.
@@ -54,6 +55,7 @@ Commands:
     kubectl edit deployment nginx-depl: Edit the nginx-depl deployment.
 
 - kubectl delete deployment nginx-depl: Delete an existing deployment in the cluster.
+- kubectl delete namespace my-namespace: Delete an existing namespace in the cluster.
 
 - kubectl logs pod-name: Get the logs for a specific pod.
     kubectl logs nginx-depl-7d4f9c7b6f-7zv8z: Get the logs for the nginx-depl pod with the specified name.
@@ -79,4 +81,68 @@ Commands:
 
 - minikube service service-name: Open a service in the default browser.
     minikube service nginx-svc: Open the nginx-svc service in the default browser.
+
+- To create component in user defined namespace:
+    kubectl create deployment nginx-depl --image=nginx -n my-namespace: Create a deployment named nginx in the my-namespace namespace.
+    kubectl apply -f deployment.yaml -n my-namespace: Apply the deployment configuration in the deployment.yaml file to the my-namespace namespace.
+    But better we can use namespace in the yaml file itself.
+    apiVersion: apps/v1
+    kind: ConfigMap
+    metadata:
+      name: my-configmap
+      namespace: my-namespace
+    data:
+        db_url: mysql-service.database
+
+- To change the default namespace we use kubens tool
+    kubens: List all namespaces in the cluster.
+    kubens my-namespace: Switch to the my-namespace namespace.
+    kubens -h: Get help for the kubens command.
+
+- minikube addons enable ingress: Enable the Ingress controller in MiniKube.
+
+- To create an ingress resource:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: my-ingress
+      namespace: my-namespace
+    spec:
+      rules:
+      - host: myapp.com
+        http:
+          paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: my-service
+                port:
+                  number: 80
+
+- For local testing we need to define the host in the /etc/hosts file:
+    sudo vi /etc/hosts
+    Add the following line:
+    <minikube-ip> myapp.com
+
+- If suppose we try to access the service using the ingress and we get 404 error then we can check the logs of the ingress controller:
+    kubectl logs -n kube-system <ingress-controller-pod-name>
+- If we try to access somepage which is not defined in the ingress then we get 404 error. To avoid this we need to add a default backend:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: default-http-backend
+      namespace: my-namespace
+    spec:
+      selector:
+        app: default-http-backend
+      ports:
+        - protocol: TCP
+            port: 80
+            targetPort: 8080
+
+Helm
+
+Helm is a package manager for Kubernetes that allows you to define, install, and manage applications as reusable packages called charts. Charts are collections of files that describe a set of Kubernetes resources, such as deployments, services, and configmaps, that can be deployed together as a single unit.
+Like homebrew for mac, apt for ubuntu, yum for centos, helm is for kubernetes.
 
